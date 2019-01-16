@@ -1,0 +1,40 @@
+[
+        {   "id":1,
+            "country":"Japan",
+            "countryInformation" : "Japan is an anime country",
+            "Visa":"You need a fucking visa",
+            "Climate":"Good clima",
+            "Job":"Nevermind",
+            "healthcover": "there is no healtcover",
+            "safety":"No robbing at all",
+            "picture":"./JPG/Tokyo.jpg"
+        },
+
+        
+            {   "id":2,
+                "country":"Deutschland",
+                "countryInformation" : "Japan is an anime country",
+                "Visa":"You need a fucking visa",
+                "Climate":"Good clima",
+                "Job":"Nevermind",
+                "healthcover": "there is no healtcover",
+                "safety":"No robbing at all",
+                "picture":"JPG"
+            },
+
+        
+            {   "id":3,
+                "country":"Korea",
+                "countryInformation" : "Japan is an anime country",
+                "Visa":"You need a fucking visa",
+                "Climate":"Good clima",
+                "Job":"Nevermind",
+                "healthcover": "there is no healtcover",
+                "safety":"No robbing at all",
+                "picture":"JPG"
+            }
+
+
+        
+    ]
+

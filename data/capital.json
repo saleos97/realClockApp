@@ -1,0 +1,10 @@
+{
+"cities": [
+    {
+        "id":1,
+        "city":"Berlin",
+        "longitude":"52.52000659999999",
+        "latitude":"13.404954"
+    }
+]
+}
