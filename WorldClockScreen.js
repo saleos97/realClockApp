@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableHighlight,StyleSheet, Text, View,Button,ActivityIndicator ,Image,ListView,Alert,TextInput,FlatList,ScrollView} from 'react-native';
+import { TouchableHighlight,StyleSheet, Text, View,Button,ActivityIndicator ,Image,ListView,Alert,TextInput,FlatList,ScrollView, TouchableOpacity} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {List, ListItem } from 'react-native-elements'
 import _ from 'lodash';
@@ -289,6 +289,8 @@ handleSearch = text=> {
           uri:[],
           city: this.props.navigation.state.params.city,
           item: this.props.navigation.state.params.item,
+          dataSource: null,summary: null, timezone: null, time: null, temperature: "",
+          isWeather:true,
         }
       }
 
@@ -307,15 +309,20 @@ handleSearch = text=> {
       }
 
       getWeatherdata = () => {
-        this.getlocation(this.state.city);
-
-        fetch('https://api.darksky.net/forecast/0ec0969177cad38274e16129efe15524/'+this.state.lat+","+this.state.long+"," + moment().unix())
+        console.log("start to get location")
+        // this.getlocation(this.state.city);
+        console.log("start to get weather")
+        console.log(this.state.lat+","+this.state.long)
+        if(this.state.isWeather){
+        fetch('https://api.darksky.net/forecast/d9df22cc5095c3dd8c9a10c8d35f22ac/37.8267,-122.4233'+moment().unix())
         .then((response) => response.json())
         .then((responseJson) => {
           this.setState({dataSource: responseJson.currently})
           this.setState({summary: responseJson.currently.summary})
           this.setState({timezone: responseJson.timezone})
           this.setState({time: responseJson.currently.time})
+          this.setState({temperature: responseJson.currently.temperature})
+          this.setState({isWeather:false})
           console.log(this.state.dataSource)
           console.log(this.state.summary)
           console.log(this.state.timezone)
@@ -327,13 +334,13 @@ handleSearch = text=> {
           // console.log(moment().unix())
           // console.log(moment().format('MMMM Do YYYY, h:mm:ss a'))
     
-          var converted = moment.tz(this.state.time*1000, this.state.timezone);
-          console.log(converted.format('MMMM Do YYYY, h:mm:ss a'))
-          console.log(converted.format())
+     
+
         })
         .catch((error) => {
           console.error(error);
         });
+      }
       }
     
       getlocation = (text)=>
@@ -383,11 +390,8 @@ if(text == this.state.uri[6].name){
   return information;        
 }
 if(text == this.state.uri[7].name){
-  var information = this.state.daten[this.getItemList()].safety;
-  return information;        
-}
-
-if(text == this.state.uri[8].name){
+  this.getWeatherdata();
+  var information = "weather" + this.state.temperature 
   return information;        
 }
 
@@ -410,7 +414,11 @@ if(text == this.state.uri[8].name){
             source={{uri:this.state.daten[this.getItemList()].picture}}
           />
 
-            <Text>{this.getWeatherdata()} </Text>
+          {/* <TouchableOpacity onPress = {()=>{this.getWeatherdata()}}>
+          <Text>Your location</Text>
+        </TouchableOpacity> */}
+      <Text>{this.showInformation(this.state.item)}</Text>
+
           </ScrollView>
         );
       }
