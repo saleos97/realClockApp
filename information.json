@@ -3,35 +3,39 @@
             "country":"Japan",
             "countryInformation" : "Japan is an anime country",
             "Visa":"You need a fucking visa",
+            "cost":"too much",
             "Climate":"Good clima",
             "Job":"Nevermind",
             "healthcover": "there is no healtcover",
             "safety":"No robbing at all",
-            "picture":"./JPG/Tokyo.jpg"
+            "picture":"https://cdn-images-1.medium.com/max/2000/1*vOrfclMVms7S4608zxC-ig.jpeg"
         },
 
         
             {   "id":2,
-                "country":"Deutschland",
-                "countryInformation" : "Japan is an anime country",
+                "country":"Germany",
+                "countryInformation" : "Germany is famous for beer and sausages",
                 "Visa":"You need a fucking visa",
+                "cost":"too much",
                 "Climate":"Good clima",
                 "Job":"Nevermind",
                 "healthcover": "there is no healtcover",
                 "safety":"No robbing at all",
-                "picture":"JPG"
+                "picture":"https://www.telegraph.co.uk/content/dam/Travel/leadAssets/31/06/berlin_3106509a.jpg?imwidth=450"
+
             },
 
         
             {   "id":3,
-                "country":"Korea",
+                "country":"South Korea",
                 "countryInformation" : "Japan is an anime country",
                 "Visa":"You need a fucking visa",
+                "cost":"too much",
                 "Climate":"Good clima",
                 "Job":"Nevermind",
                 "healthcover": "there is no healtcover",
                 "safety":"No robbing at all",
-                "picture":"JPG"
+                "picture":"https://znews-photo.zadn.vn/w1024/Uploaded/zbvunua/2018_06_04/s1.jpg"
             }
 
 

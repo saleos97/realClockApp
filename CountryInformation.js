@@ -1,6 +1,8 @@
 import React from 'react';
-import {TouchableHighlight,FlatList, StyleSheet, Text, View,Image,Button,Alert,ActivityIndicator} from 'react-native';
+import {TouchableHighlight,FlatList, StyleSheet, Text, View,Image,ScrollView,Alert,ActivityIndicator} from 'react-native';
 import {List, ListItem } from 'react-native-elements'
+import { createStackNavigator, createAppContainer } from 'react-navigation';
+const data = require('./information.json'); 
 
 const list = [
   {
@@ -33,37 +35,45 @@ const list = [
 
 class CountryInformation extends React.Component {
 
+
   constructor(props){
     super(props);
     this.state={
       isLoading : true,
         capital : this.props.navigation.state.params.capital,
         daten:[],
-    }
-
-
-
-    
+          }
+  
 }
 
 
 
+getItemList = () => {
+  var country = this.state.capital;
+  for(var i = 0;i<data.length;i++) {
+    var obj = data[i];
+    if(obj.country == country){
+    return i;
+    }
+  }
+}
 
- /* getData(){
-    const data = require('./information.json'); 
-    this.setState({daten:data,isLoading:false});
+showInformation = (text) => {
 
-*/
-
-  /*  for(var i = 0; i < data.length; i++) {
-      var obj = data[i];
-      this.setState({daten:data[i]});
-    }*/
+  if(text == this.state.uri[0].name){
+    return (
+      <View>
+      <Text>This is a test to see what happens</Text>
+    </View>
+    );
   
   
-  
+    // Alert.alert(this.state.daten[this.getItemList()].countryInformation+"");
+  }
+
+}
+
   componentDidMount(){
-    const data = require('./information.json'); 
     this.setState({daten:data,isLoading:false,uri:list});
 
   }
@@ -71,6 +81,7 @@ class CountryInformation extends React.Component {
   
 
     render() {
+
      
       if(this.state.isLoading){
         return(
@@ -80,14 +91,16 @@ class CountryInformation extends React.Component {
         )
       }    
       return (
-        <View>
+        
+        <ScrollView>
         <View>
           <Image
-            style={{width:"100%",height: 100}}
-            source={require('./JPG/Tokyo.jpg')}
+            style={{width:"100%",height: 200}}
+            source={{uri:this.state.daten[this.getItemList()].picture}}
           />
 </View>
-<View >
+<View>
+  
         <List>
           <FlatList
             data={this.state.uri}
@@ -98,13 +111,24 @@ class CountryInformation extends React.Component {
 
               <ListItem 
                 title={`${item.name}`}
-                onPress={()=>Alert.alert("Hallo")}
+
+                onPress={()=>subtitle="abc"}
               />
               </TouchableHighlight>}
           />
         </List>
         </View>
-      </View>
+      </ScrollView>
+      );
+    }
+  }
+
+  class DetailsScreen extends React.Component {
+    render() {
+      return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text>Details Screen</Text>
+        </View>
       );
     }
   }
@@ -117,5 +141,14 @@ class CountryInformation extends React.Component {
       justifyContent: 'center',
     },
   });
+
+  const RootStack = createStackNavigator(
+    {
+      Home: CountryInformation,
+      Details: DetailsScreen,
+    },
+  );
+
+
   
-  export default CountryInformation;
+  export default createAppContainer(RootStack);

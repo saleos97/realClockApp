@@ -1,49 +1,62 @@
 import React from 'react';
-import { StyleSheet, Text, View,Button,ActivityIndicator ,ListView,Alert,TextInput,FlatList} from 'react-native';
+import { TouchableHighlight,StyleSheet, Text, View,Button,ActivityIndicator ,Image,ListView,Alert,TextInput,FlatList,ScrollView} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import {List, ListItem } from 'react-native-elements'
 import _ from 'lodash';
 import Geocoder from 'react-native-geocoding';
+import moment from 'moment';
+import moment1 from 'moment-timezone';
 import { createAppContainer, createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
-import CountryInformation from './CountryInformation'
-import data from './data/capital.json';
+const data = require('./information.json'); 
+const list = [
+{
+    name: 'About Country',
+
+  },
+  {
+    name: 'Visa'
+  },
+  {
+    name: 'Cost of Living'
+  },
+  {
+    name: 'Climate'
+  },
+  {
+    name: 'Job Prospect/Part-time Job'
+  },
+  {
+    name: 'International Health Cover'
+  },
+  {
+    name: 'Safety/Emergency Contact'
+  },
+  {
+    name: 'Weather'
+  }
+]
+
+
+
+
 class WorldClockMain extends React.Component{
-constructor(props){
+
+  constructor(props){
   super(props);
   this.state ={
    text:""
-
   }
 }
 
-
-getJson=()=>{
-  
- 
-  this.setState({
-    
-    someData: data.cities,
- }
-);
-var abc = this.state.someData;
-console.log(abc+"");
- 
-      
-  
-
-}
-
   render(){
-    const {navigate} = this.props.navigation;
-    return(
-<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-<Button
+  const {navigate} = this.props.navigation;
+  return(
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Button
         title="Go to Jane's profile"
         onPress={() => navigate('WorldClockScreen', {name: 'Jane'})}
-
-      />
-      <Button title ="Test Json" onPress={ () =>this.getJson()}></Button>
-      <FlatList></FlatList>
-      </View>
+        />  
+    </View>
     );
   }
 }
@@ -64,23 +77,6 @@ class WorldClockScreen extends React.Component {
 }
 
 
-getWeather (){
-  return fetch('https://facebook.github.io/react-native/movies.json')
-  .then((response) => response.json())
-  .then((responseJson) => {
-
-    this.setState({
-      fulldata: responseJson.movies,
-    }, function(){
-
-    });
-
-  })
-  .catch((error) =>{
-    console.error(error);
-  });
-
-}
 
 ListViewItemSeparatorLine = () => {
     return (
@@ -183,7 +179,7 @@ handleSearch = text=> {
             renderSeparator= {this.ListViewItemSeparatorLine}
             renderRow={
             (rowData) => <Text style={{padding:20,fontSize:20}}
-            onPress={()=>{/*this.getlocation(rowData.capital);*/navigate('CountryInformation', {capital : rowData.countryName} )}}>{rowData.capital} ({rowData.countryName})</Text>
+            onPress={()=>{/*this.getlocation(rowData.capital);*/navigate('CountryInformation', {capital : rowData.countryName, city :rowData.capital} )}}>{rowData.capital} ({rowData.countryName})</Text>
             }>
         </ListView>
     </View>
@@ -191,6 +187,234 @@ handleSearch = text=> {
 );
     }
   }
+
+  class CountryInformation extends React.Component {
+
+
+    constructor(props){
+      super(props);
+      this.state={
+        isLoading : true,
+          capital : this.props.navigation.state.params.capital,
+          city: this.props.navigation.state.params.city,
+          daten:[],
+            }
+    
+  }
+  
+  
+  
+  getItemList = () => {
+    var country = this.state.capital;
+    for(var i = 0;i<data.length;i++) {
+      var obj = data[i];
+      if(obj.country == country){
+      return i;
+      }
+    }
+  }
+  
+  showInformation = (text) => {
+  
+    if(text == this.state.uri[0].name){
+      return (
+        <View>
+        <Text>This is a test to see what happens</Text>
+      </View>
+      );
+    
+    
+      // Alert.alert(this.state.daten[this.getItemList()].countryInformation+"");
+    }
+  
+  }
+  
+    componentDidMount(){
+      this.setState({daten:data,isLoading:false,uri:list});
+  
+    }
+    
+    
+  
+      render() {
+        const {navigate} = this.props.navigation;
+
+       
+        if(this.state.isLoading){
+          return(
+            <View style={{flex: 1, padding: 20}}>
+              <ActivityIndicator/>
+            </View>
+          )
+        }    
+        return (
+          
+          <ScrollView>
+          <View>
+            <Image
+              style={{width:"100%",height: 200}}
+              source={{uri:this.state.daten[this.getItemList()].picture}}
+            />
+  </View>
+  <View>
+    
+          <List>
+            <FlatList
+              data={this.state.uri}
+              keyExtractor={(x, i) => i.toString()}
+              renderItem={({ item }) =>
+              <TouchableHighlight
+              underlayColor='#006400'>
+  
+                <ListItem 
+                  title={`${item.name}`}
+                  onPress={()=>navigate('DetailsScreen',{city: this.state.city,item: item.name, capital:this.state.capital })}
+                />
+                </TouchableHighlight>}
+            />
+          </List>
+          </View>
+        </ScrollView>
+        );
+      }
+    }
+
+    class DetailsScreen extends React.Component {
+      constructor(props){
+        super(props);
+        this.state={
+          capital:this.props.navigation.state.params.capital,
+          daten: [],
+          isLoading: true,
+          uri:[],
+          city: this.props.navigation.state.params.city,
+          item: this.props.navigation.state.params.item,
+        }
+      }
+
+      componentDidMount(){
+        this.setState({daten:data,isLoading:false,uri:list});
+    
+      }
+      getItemList = () => {
+        var country = this.state.capital;
+        for(var i = 0;i<data.length;i++) {
+          var obj = data[i];
+          if(obj.country == country){
+          return i;
+          }
+        }
+      }
+
+      getWeatherdata = () => {
+        this.getlocation(this.state.city);
+
+        fetch('https://api.darksky.net/forecast/0ec0969177cad38274e16129efe15524/'+this.state.lat+","+this.state.long+"," + moment().unix())
+        .then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({dataSource: responseJson.currently})
+          this.setState({summary: responseJson.currently.summary})
+          this.setState({timezone: responseJson.timezone})
+          this.setState({time: responseJson.currently.time})
+          console.log(this.state.dataSource)
+          console.log(this.state.summary)
+          console.log(this.state.timezone)
+          console.log(this.state.time)
+          // var myDate = new Date( this.state.time *1000);
+          // console.log(myDate.toGMTString());
+          // console.log(myDate.toLocaleString())
+    
+          // console.log(moment().unix())
+          // console.log(moment().format('MMMM Do YYYY, h:mm:ss a'))
+    
+          var converted = moment.tz(this.state.time*1000, this.state.timezone);
+          console.log(converted.format('MMMM Do YYYY, h:mm:ss a'))
+          console.log(converted.format())
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      }
+    
+      getlocation = (text)=>
+ {
+  Geocoder.init('AIzaSyBLV2i0Gpw0IYKCKVwf4nfVLaVHEw2vXT0');
+  var abc="";
+   Geocoder.getFromLocation(text).then(
+     json => {
+     var location =json.results[0].geometry.location;
+        this.setState({lat :location.lat,  long:location.lng})
+    },
+     error => {
+       alert(error);
+     }
+   );
+  }  
+      
+
+      showInformation = (text) => {
+  
+        if(text == this.state.uri[0].name){
+            var information = this.state.daten[this.getItemList()].countryInformation;
+            return information;        
+        }
+        if(text == this.state.uri[1].name){
+          var information = this.state.daten[this.getItemList()].Visa;
+          return information;        
+      }
+      if(text == this.state.uri[2].name){
+        var information = this.state.daten[this.getItemList()].cost;
+        return information;        
+    }
+    if(text == this.state.uri[3].name){
+      var information = this.state.daten[this.getItemList()].Climate;
+      return information;        
+  }
+  if(text == this.state.uri[4].name){
+    var information = this.state.daten[this.getItemList()].Job;
+    return information;        
+}
+if(text == this.state.uri[5].name){
+  var information = this.state.daten[this.getItemList()].healthcover;
+  return information;        
+}
+if(text == this.state.uri[6].name){
+  var information = this.state.daten[this.getItemList()].safety;
+  return information;        
+}
+if(text == this.state.uri[7].name){
+  var information = this.state.daten[this.getItemList()].safety;
+  return information;        
+}
+
+if(text == this.state.uri[8].name){
+  return information;        
+}
+
+
+  
+      }
+
+      render() {
+        if(this.state.isLoading){
+          return(
+            <View style={{flex: 1, padding: 20}}>
+              <ActivityIndicator/>
+            </View>
+          )
+        } 
+        return (
+          <ScrollView>
+            <Image
+            style={{width:"100%",height: 200}}
+            source={{uri:this.state.daten[this.getItemList()].picture}}
+          />
+
+            <Text>{this.getWeatherdata()} </Text>
+          </ScrollView>
+        );
+      }
+    }
 
   const AppNavigator = createStackNavigator({
     WorldClockMain: {
@@ -201,6 +425,9 @@ handleSearch = text=> {
     },
     CountryInformation: {
       screen: CountryInformation,
+    },
+    DetailsScreen: {
+      screen: DetailsScreen,
     }
 
   });
