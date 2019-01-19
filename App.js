@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Entypo from '@expo/vector-icons/Entypo';
-import StopwatchScreen from './StopwatchScreen';
+// import StopwatchScreen from './StopwatchScreen';
 import WordClockScreen from './WorldClockScreen';
 import TimerScreen from './TimerScreen';
-import AlarmScreen from './AlarmScreen';
+import Exchange from './Exchange';
 
 
 import {createBottomTabNavigator,createAppContainer} from 'react-navigation';
@@ -29,21 +29,22 @@ const TabNavigator = createBottomTabNavigator({
     <Ionicons name='md-timer' size={24}/>
     )      
   }},
-  Alarm: {screen:AlarmScreen,
+  Exchange: {screen:Exchange,
     navigationOptions:{
-    tabBarLabel:'Alarm',
+    tabBarLabel:'Currency',
   tabBarIcon: ({tintColor}) =>(
-    <Ionicons name='md-alarm' size={24}/>
-    )      
-  }},
-
-  Stopwatch: {screen:StopwatchScreen,
-    navigationOptions:{
-    tabBarLabel:'Stopwatch',
-  tabBarIcon: ({tintColor}) =>(
-    <Entypo name='stopwatch' size ={24}/>
+    <Ionicons name='md-cash' size={24}/>
     )      
   }}
+  // ,
+
+  // Stopwatch: {screen:StopwatchScreen,
+  //   navigationOptions:{
+  //   tabBarLabel:'Stopwatch',
+  // tabBarIcon: ({tintColor}) =>(
+  //   <Entypo name='stopwatch' size ={24}/>
+  //   )      
+  // }}
 }
 
 );
